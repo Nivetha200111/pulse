@@ -22,7 +22,6 @@ export function InvoicePreview({ result }: InvoicePreviewProps) {
           height={630}
           className="h-auto w-full"
           unoptimized
-          loader={() => url}
         />
       </div>
     </Card>
