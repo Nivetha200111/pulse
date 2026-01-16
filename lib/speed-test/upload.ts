@@ -6,9 +6,17 @@ interface UploadTestOptions {
 
 function makePayload(size: number) {
   const buffer = new Uint8Array(size);
+  const maxChunkSize = 65536; // 64KB - browser crypto.getRandomValues() limit
+
   if (typeof crypto !== "undefined" && "getRandomValues" in crypto) {
-    crypto.getRandomValues(buffer);
+    // Generate random data in chunks to respect browser limits
+    for (let offset = 0; offset < size; offset += maxChunkSize) {
+      const chunkSize = Math.min(maxChunkSize, size - offset);
+      const chunk = new Uint8Array(buffer.buffer, offset, chunkSize);
+      crypto.getRandomValues(chunk);
+    }
   } else {
+    // Fallback for environments without crypto
     for (let i = 0; i < buffer.length; i += 1) {
       buffer[i] = Math.floor(Math.random() * 255);
     }
