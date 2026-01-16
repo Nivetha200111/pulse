@@ -6,7 +6,7 @@ export const gradeLabels: Record<ServiceGrade, string> = {
   B: "Meh",
   C: "Underdelivering",
   D: "Scamming You",
-  F: "Call a Lawyer",
+  F: "Unacceptable",
 };
 
 export function gradeFromScore(score: number): ServiceGrade {

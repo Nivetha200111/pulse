@@ -6,7 +6,6 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScoreDisplay } from "@/components/results/score-display";
 import { MoneyOwed } from "@/components/results/money-owed";
-import { InvoicePreview } from "@/components/results/invoice-preview";
 import { ShareButtons } from "@/components/results/share-buttons";
 import { getResult } from "@/lib/db/kv";
 import { formatINR, formatMbps } from "@/lib/utils/format";
@@ -73,9 +72,8 @@ export default async function ResultsPage({ params }: ResultsPageProps) {
           </Card>
         </section>
 
-        <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-          <InvoicePreview result={result} />
-          <Card className="flex flex-col justify-between gap-6 text-center">
+        <section className="flex justify-center">
+          <Card className="flex w-full max-w-xl flex-col justify-between gap-6 text-center">
             <div className="space-y-3">
               <p className="text-xs uppercase tracking-[0.3em] text-[var(--text-muted)]">
                 Invoice total
