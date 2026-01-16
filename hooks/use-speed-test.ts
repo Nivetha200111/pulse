@@ -139,8 +139,13 @@ export function useSpeedTest() {
         setProgress(100);
         setPhase("completed");
         return draftResult;
-      } catch {
-        setError("Test failed. Please retry.");
+      } catch (err) {
+        console.error("Speed test error:", err);
+        setError(
+          err instanceof Error
+            ? `Test failed: ${err.message}`
+            : "Test failed. Please retry."
+        );
         setPhase("error");
         return null;
       }

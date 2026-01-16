@@ -27,10 +27,14 @@ export async function runDownloadTest({
           `/api/speed-test/download?size=${chunkSize}`,
           { cache: "no-store" }
         );
+        if (!response.ok) {
+          throw new Error(`Download endpoint returned ${response.status}`);
+        }
         const buffer = await response.arrayBuffer();
         totalBytes += buffer.byteLength;
-      } catch {
-        // Ignore failed chunks for best-effort measurement.
+      } catch (error) {
+        console.error("Download chunk failed:", error);
+        // Continue trying other chunks
       }
     }
   };
@@ -40,6 +44,10 @@ export async function runDownloadTest({
 
   const duration = performance.now() - start;
   const speedMbps = duration > 0 ? (totalBytes * 8) / (duration / 1000) / 1e6 : 0;
+
+  if (totalBytes === 0) {
+    throw new Error("Download test failed - no data received. Check API endpoints.");
+  }
 
   return { speedMbps: Number(speedMbps.toFixed(2)), bytes: totalBytes, duration };
 }
