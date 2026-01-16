@@ -18,18 +18,18 @@ export default function Home() {
               Calculate what your ISP owes you.
             </h1>
             <p className="text-lg text-[var(--text-secondary)] md:text-xl">
-              Launch a 20-second real-time audit, expose underdelivered speeds,
-              and generate a shareable invoice that puts ISPs on blast.
+              Run a 20-second speed test and compare your actual speeds against
+              what you're paying for.
             </p>
             <div className="flex flex-wrap gap-4 text-xs uppercase tracking-[0.3em] text-[var(--text-muted)]">
               <span className="rounded-full border border-[rgba(0,240,255,0.4)] px-4 py-2 text-[var(--neon-cyan)]">
-                Live Speed Test
+                Speed Test
               </span>
               <span className="rounded-full border border-[rgba(255,0,170,0.4)] px-4 py-2 text-[var(--neon-pink)]">
-                Viral Invoice
+                Invoice
               </span>
               <span className="rounded-full border border-[rgba(0,255,136,0.4)] px-4 py-2 text-[var(--neon-green)]">
-                City Rankings
+                Rankings
               </span>
             </div>
           </div>
@@ -41,24 +41,21 @@ export default function Home() {
 
         <section className="grid gap-6 md:grid-cols-3">
           <Card>
-            <CardTitle>Rage bait</CardTitle>
-            <CardValue>“Jio owes me ₹847”</CardValue>
+            <CardTitle>Accountability</CardTitle>
+            <CardValue>Track what you're owed</CardValue>
           </Card>
           <Card>
-            <CardTitle>Shareable proof</CardTitle>
-            <CardValue>Instant invoice PNG</CardValue>
+            <CardTitle>Share results</CardTitle>
+            <CardValue>Generate invoice PNG</CardValue>
           </Card>
           <Card>
-            <CardTitle>City wars</CardTitle>
-            <CardValue>#1 Bengaluru ACT 72/100</CardValue>
+            <CardTitle>City rankings</CardTitle>
+            <CardValue>Compare ISPs in your area</CardValue>
           </Card>
         </section>
 
         <div className="flex items-center justify-between border-t border-[rgba(255,255,255,0.08)] pt-8">
           <TotalTests />
-          <p className="text-xs uppercase tracking-[0.3em] text-[var(--text-muted)]">
-            Built for viral sharing
-          </p>
         </div>
       </main>
       <Footer />
