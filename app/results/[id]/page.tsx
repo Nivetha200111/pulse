@@ -12,11 +12,11 @@ import { getResult } from "@/lib/db/kv";
 import { formatINR, formatMbps } from "@/lib/utils/format";
 
 interface ResultsPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function ResultsPage({ params }: ResultsPageProps) {
-  const { id } = params;
+  const { id } = await params;
   const result = await getResult(id);
 
   if (!result) {

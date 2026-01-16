@@ -51,13 +51,22 @@ function TestPageContent() {
     if (!result || phase !== "completed" || savedRef.current) return;
     savedRef.current = true;
     const save = async () => {
-      const response = await fetch("/api/results", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(result),
-      });
-      const data = (await response.json()) as { id: string };
-      router.push(`/results/${data.id}`);
+      try {
+        const response = await fetch("/api/results", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(result),
+        });
+        if (!response.ok) {
+          console.error("Failed to save result:", await response.text());
+          return;
+        }
+        const data = (await response.json()) as { id: string };
+        console.log("Result saved with ID:", data.id);
+        router.push(`/results/${data.id}`);
+      } catch (error) {
+        console.error("Error saving result:", error);
+      }
     };
     save();
   }, [phase, result, router]);
