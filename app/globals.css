@@ -1,26 +1,90 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-tertiary: #1a1a24;
+  --neon-cyan: #00f0ff;
+  --neon-pink: #ff00aa;
+  --neon-green: #00ff88;
+  --neon-red: #ff3366;
+  --neon-yellow: #ffcc00;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0b0;
+  --text-muted: #606070;
+  --grid-line: rgba(255, 255, 255, 0.06);
+  --glow-soft: 0 0 24px rgba(0, 240, 255, 0.25);
+  --glow-strong: 0 0 32px rgba(255, 0, 170, 0.45);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-heading);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: radial-gradient(
+      1200px 800px at 20% -10%,
+      rgba(0, 240, 255, 0.08),
+      transparent 60%
+    ),
+    radial-gradient(
+      800px 600px at 100% 20%,
+      rgba(255, 0, 170, 0.08),
+      transparent 70%
+    ),
+    var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.01em;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading), ui-monospace, SFMono-Regular, monospace;
+  letter-spacing: 0.02em;
+}
+
+@layer utilities {
+  .text-glow-cyan {
+    text-shadow: 0 0 18px rgba(0, 240, 255, 0.6);
+  }
+
+  .text-glow-pink {
+    text-shadow: 0 0 18px rgba(255, 0, 170, 0.55);
+  }
+
+  .panel-border {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .grid-surface {
+    background-image: linear-gradient(
+        to right,
+        var(--grid-line) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .glass {
+    background: rgba(10, 10, 15, 0.72);
+    backdrop-filter: blur(12px);
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
 }
