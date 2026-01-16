@@ -2,6 +2,7 @@ import { kv } from "@vercel/kv";
 import type { SpeedTestResult } from "@/types/speed-test";
 import type { LeaderboardEntry } from "@/types/leaderboard";
 import { getRandomCity } from "@/lib/data/cities";
+import { sanitizeRedisKey } from "@/lib/security/validation";
 
 const memoryStore = new Map<
   string,
@@ -75,7 +76,11 @@ export async function updateLeaderboard(
   isp: string,
   score: number
 ) {
-  const key = `leaderboard:${city}:${isp}`;
+  // Sanitize inputs to prevent Redis key injection
+  const sanitizedCity = sanitizeRedisKey(city);
+  const sanitizedIsp = sanitizeRedisKey(isp);
+  const key = `leaderboard:${sanitizedCity}:${sanitizedIsp}`;
+
   const existing =
     (await kvGet<{ totalScore: number; count: number }>(key)) ?? {
       totalScore: 0,

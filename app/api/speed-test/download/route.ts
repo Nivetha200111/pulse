@@ -1,10 +1,26 @@
 export const runtime = "edge";
 
+const MAX_DOWNLOAD_SIZE = 2 * 1024 * 1024; // 2MB max
+const MIN_DOWNLOAD_SIZE = 1024; // 1KB min
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
+
+  // Validate and sanitize size parameter
+  const sizeParam = searchParams.get("size");
+  const requestedSize = sizeParam ? Number(sizeParam) : 1024 * 1024;
+
+  // Reject invalid or malicious values
+  if (!Number.isFinite(requestedSize) || requestedSize < 0) {
+    return Response.json(
+      { error: "Invalid size parameter" },
+      { status: 400 }
+    );
+  }
+
   const size = Math.min(
-    2 * 1024 * 1024,
-    Math.max(1024, Number(searchParams.get("size") ?? 1024 * 1024))
+    MAX_DOWNLOAD_SIZE,
+    Math.max(MIN_DOWNLOAD_SIZE, requestedSize)
   );
 
   // Generate random data in smaller chunks to avoid edge runtime limitations
