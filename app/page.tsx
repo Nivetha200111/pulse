@@ -19,7 +19,7 @@ export default function Home() {
             </h1>
             <p className="text-lg text-[var(--text-secondary)] md:text-xl">
               Run a 20-second speed test and compare your actual speeds against
-              what you're paying for.
+              what you are paying for.
             </p>
             <div className="flex flex-wrap gap-4 text-xs uppercase tracking-[0.3em] text-[var(--text-muted)]">
               <span className="rounded-full border border-[rgba(0,240,255,0.4)] px-4 py-2 text-[var(--neon-cyan)]">
@@ -42,7 +42,7 @@ export default function Home() {
         <section className="grid gap-6 md:grid-cols-3">
           <Card>
             <CardTitle>Accountability</CardTitle>
-            <CardValue>Track what you're owed</CardValue>
+            <CardValue>Track what you are owed</CardValue>
           </Card>
           <Card>
             <CardTitle>Share results</CardTitle>
