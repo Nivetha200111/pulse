@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Header } from "@/components/layout/header";
@@ -14,7 +14,7 @@ import { Card, CardTitle, CardValue } from "@/components/ui/card";
 import { useSpeedTest } from "@/hooks/use-speed-test";
 import { getISPById, getPlanById } from "@/lib/data/isps";
 
-export default function TestPage() {
+function TestPageContent() {
   const router = useRouter();
   const params = useSearchParams();
   const ispId = params.get("isp") ?? "";
@@ -122,5 +122,13 @@ export default function TestPage() {
         </section>
       </main>
     </div>
+  );
+}
+
+export default function TestPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen"><Header /><main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 md:px-12 pt-20"><p>Loading...</p></main></div>}>
+      <TestPageContent />
+    </Suspense>
   );
 }
