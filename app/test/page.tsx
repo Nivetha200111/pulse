@@ -20,7 +20,7 @@ function TestPageContent() {
   const ispId = params.get("isp") ?? "";
   const planId = params.get("plan") ?? "";
   const savedRef = useRef(false);
-  const startedRef = useRef(false);
+  const lastKeyRef = useRef<string | null>(null);
 
   const {
     phase,
@@ -35,6 +35,7 @@ function TestPageContent() {
     result,
     error,
     runTest,
+    reset,
   } = useSpeedTest();
 
   const isp = getISPById(ispId);
@@ -42,10 +43,13 @@ function TestPageContent() {
 
   useEffect(() => {
     if (!ispId || !planId) return;
-    if (startedRef.current) return;
-    startedRef.current = true;
+    const key = `${ispId}:${planId}`;
+    if (lastKeyRef.current === key) return;
+    lastKeyRef.current = key;
+    savedRef.current = false;
+    reset();
     runTest({ ispId, planId });
-  }, [ispId, planId, runTest]);
+  }, [ispId, planId, reset, runTest]);
 
   useEffect(() => {
     if (!result || phase !== "completed" || savedRef.current) return;

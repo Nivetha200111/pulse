@@ -52,7 +52,11 @@ export function validateSpeedTestResult(
     return { valid: false, error: "Invalid or missing planName" };
   }
 
-  if (!data.grade || typeof data.grade !== "string" || !["A", "B", "C", "D", "F"].includes(data.grade)) {
+  if (
+    !data.grade ||
+    typeof data.grade !== "string" ||
+    !["A+", "A", "B", "C", "D", "F"].includes(data.grade)
+  ) {
     return { valid: false, error: "Invalid or missing grade" };
   }
 
@@ -83,7 +87,7 @@ export function validateSpeedTestResult(
     if (field === "packetLoss" && (value < 0 || value > 100)) {
       return { valid: false, error: "Packet loss must be 0-100" };
     }
-    if (field === "deliveryRatio" && (value < 0 || value > 10)) {
+    if (field === "deliveryRatio" && (value < 0 || value > 1)) {
       return { valid: false, error: "Delivery ratio out of range" };
     }
     if ((field === "downloadSpeed" || field === "uploadSpeed" || field === "promisedSpeed") && value > 100000) {
@@ -111,7 +115,7 @@ export function validateSpeedTestResult(
     jitter: data.jitter as number,
     packetLoss: data.packetLoss as number,
     serviceScore: data.serviceScore as number,
-    grade: data.grade as "A" | "B" | "C" | "D" | "F",
+    grade: data.grade as "A+" | "A" | "B" | "C" | "D" | "F",
     moneyOwed: data.moneyOwed as number,
     deliveryRatio: data.deliveryRatio as number,
     city,

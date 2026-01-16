@@ -1,19 +1,34 @@
 import { ImageResponse } from "@vercel/og";
+import { sanitizeString } from "@/lib/security/validation";
 
 export const runtime = "edge";
 
+function clampNumber(
+  value: string | null,
+  fallback: number,
+  min: number,
+  max: number
+) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return fallback;
+  return Math.min(max, Math.max(min, parsed));
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const isp = searchParams.get("isp") ?? "ISP";
-  const plan = searchParams.get("plan") ?? "Plan";
-  const promised = Number(searchParams.get("promised") ?? 100);
-  const actual = Number(searchParams.get("actual") ?? 85);
-  const score = Number(searchParams.get("score") ?? 72);
-  const grade = searchParams.get("grade") ?? "B";
-  const owed = Number(searchParams.get("owed") ?? 320);
+  const isp = sanitizeString(searchParams.get("isp") ?? "ISP", 40);
+  const plan = sanitizeString(searchParams.get("plan") ?? "Plan", 60);
+  const promised = clampNumber(searchParams.get("promised"), 100, 0, 10000);
+  const actual = clampNumber(searchParams.get("actual"), 85, 0, 10000);
+  const score = clampNumber(searchParams.get("score"), 72, 0, 100);
+  const owed = clampNumber(searchParams.get("owed"), 320, 0, 100000);
+  const gradeRaw = sanitizeString(searchParams.get("grade") ?? "B", 2);
+  const grade = ["A+", "A", "B", "C", "D", "F"].includes(gradeRaw)
+    ? gradeRaw
+    : "B";
   const ratio =
     promised > 0 ? Math.min(100, Math.round((actual / promised) * 100)) : 0;
-  const total = owed + 750;
+  const total = Math.round(owed + 750);
 
   return new ImageResponse(
     (

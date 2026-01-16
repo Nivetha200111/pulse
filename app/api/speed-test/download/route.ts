@@ -1,9 +1,26 @@
+import { getClientIdentifier, rateLimit } from "@/lib/security/rate-limit";
+
 export const runtime = "edge";
 
 const MAX_DOWNLOAD_SIZE = 2 * 1024 * 1024; // 2MB max
 const MIN_DOWNLOAD_SIZE = 1024; // 1KB min
 
 export async function GET(request: Request) {
+  const identifier = `${getClientIdentifier(request)}:download`;
+  const limit = await rateLimit(identifier, { interval: 60, maxRequests: 240 });
+  if (!limit.success) {
+    return Response.json(
+      { error: "Rate limit exceeded" },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": "60",
+          "X-RateLimit-Remaining": "0",
+        },
+      }
+    );
+  }
+
   const { searchParams } = new URL(request.url);
 
   // Validate and sanitize size parameter
@@ -49,6 +66,7 @@ export async function GET(request: Request) {
       "Content-Type": "application/octet-stream",
       "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
       "Content-Length": String(size),
+      "X-RateLimit-Remaining": String(limit.remaining),
     },
   });
 }

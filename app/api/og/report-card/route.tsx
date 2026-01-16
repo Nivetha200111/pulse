@@ -1,12 +1,27 @@
 import { ImageResponse } from "@vercel/og";
+import { sanitizeString } from "@/lib/security/validation";
 
 export const runtime = "edge";
 
+function clampNumber(
+  value: string | null,
+  fallback: number,
+  min: number,
+  max: number
+) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return fallback;
+  return Math.min(max, Math.max(min, parsed));
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const isp = searchParams.get("isp") ?? "ISP";
-  const score = Number(searchParams.get("score") ?? 70);
-  const grade = searchParams.get("grade") ?? "B";
+  const isp = sanitizeString(searchParams.get("isp") ?? "ISP", 40);
+  const score = clampNumber(searchParams.get("score"), 70, 0, 100);
+  const gradeRaw = sanitizeString(searchParams.get("grade") ?? "B", 2);
+  const grade = ["A+", "A", "B", "C", "D", "F"].includes(gradeRaw)
+    ? gradeRaw
+    : "B";
 
   return new ImageResponse(
     (
