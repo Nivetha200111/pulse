@@ -1,11 +1,12 @@
 import { getResult } from "@/lib/db/kv";
 
 interface Params {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function GET(_request: Request, { params }: Params) {
-  const result = await getResult(params.id);
+  const { id } = await params;
+  const result = await getResult(id);
   if (!result) {
     return Response.json({ error: "Not found" }, { status: 404 });
   }
